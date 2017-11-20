@@ -1,0 +1,245 @@
+{
+    package parser
+
+    import (
+        "strings"
+    )
+
+    type Type struct {
+        Name string
+        Source string
+    }
+
+    type Package struct {
+        Name string
+        Contents []Object
+    }
+
+    type Object struct {
+        ObjectType string
+        Source string
+        Kind string
+        Name string
+        Size string
+        Value string
+        Contents []Object
+        Attributes []string
+    }
+
+    func asString(data interface{}) string {
+        if i, ok := data.([]uint8); ok {
+            return string([]byte(i))
+        } else if i, ok := data.(string); ok {
+            return i
+        } else {
+            i := data.([]interface{})
+            arr := make([]uint8, len(i))
+            for x, v := range i {
+                arr[x] = (v.([]uint8))[0]
+            }
+            return asString(arr)
+        }
+    }
+
+    func strSlice(rawSlice interface{}) []string {
+        switch t := rawSlice.(type) {
+        case []interface{}:
+            arr := make([]string, len(t))
+            for i, s := range t {
+                arr[i] = s.(string)
+            }
+            return arr
+        case []string:
+            return t
+        }
+        return []string{}
+    }
+
+    func objSlice(rawSlice interface{}) []Object {
+        switch t := rawSlice.(type) {
+        case []interface{}:
+            arr := make([]Object, len(t))
+            for i, s := range t {
+                arr[i] = s.(Object)
+            }
+            return arr
+        case []Object:
+            return t
+        }
+        return []Object{}
+    }
+
+    const (
+        SourceNative = "native"
+        SourceUser = "user"
+        ObjID = "id"
+        ObjField = "field"
+        ObjArray = "array"
+        ObjStruct = "struct"
+        AttributeDeprecated = "deprecated"
+    )
+}
+
+/**
+  Simple initial blocks and types
+**/
+
+start
+    = val:contents { return val, nil }
+
+whitespace
+    = [ \t]
+
+EOL
+    = [ \t\r\n]+ comment?
+
+EOF
+    = !.
+
+_ "whitespace"
+    = whitespace* { return nil, nil }
+
+__ "eol"
+    = EOL* { return nil, nil }
+
+digit
+    = [0-9]
+
+digits
+    = digits:digit* { return asString(digits), nil }
+
+hexValue
+    = first:"0x" rest:[a-fA-F0-9]+ { return asString(first) + asString(rest), nil }
+
+itemName
+    = value:[a-z_]+ { return asString(value), nil }
+
+openCurlyBrace
+    = "{"
+
+closeCurlyBrace
+    = "}"
+
+openSquareBrace
+    = "["
+
+closeSquareBrace
+    = "]"
+
+comment
+    = "//" [^\n]* (EOL/EOF)? { return nil, nil }
+
+attribute
+    = _ "!" flag:("deprecated") { return asString(flag), nil }
+
+attributeList
+ = attr:attribute+ { return strSlice(attr), nil }
+
+// Language basic definitions
+
+arraySize
+    = openSquareBrace val:("*" / digits) closeSquareBrace { return asString(val), nil }
+
+nativeType
+    = val:("uint8" / "uint32" / "uint64" / "byte" / "double" / "string" / "blob" / "bool" / "uuid" / "any") {
+        return Type{
+            Name: asString(val),
+            Source: SourceNative,
+        }, nil
+    }
+
+userType
+    = "@" val:itemName {
+        return Type{
+            Name: val.(string),
+            Source: SourceUser,
+        }, nil
+    }
+
+idDefinition
+    = "id" _ val:hexValue {
+        return Object{
+            ObjectType: ObjID,
+            Value: asString(val),
+        }, nil
+    }
+
+fieldDefinition
+    = t:(nativeType / userType) _ name:itemName attributes:attributeList? {
+        return Object{
+            ObjectType: ObjField,
+            Source: t.(Type).Source,
+            Kind: t.(Type).Name,
+            Name: name.(string),
+            Attributes: strSlice(attributes),
+        }, nil
+    }
+
+arrayDefinition
+    = t:(nativeType / userType) size:arraySize _ name:itemName attributes:attributeList? {
+        return Object{
+            ObjectType: ObjArray,
+            Source: t.(Type).Source,
+            Kind: t.(Type).Name,
+            Name: name.(string),
+            Size: size.(string),
+            Attributes: strSlice(attributes),
+        }, nil
+    }
+
+// Language structures
+
+contents
+    = val:fileContents+ { return val, nil }
+
+fileContents
+    = __? comment? val:pkg __? { return val, nil }
+
+// Structures
+
+str
+    = header:strHeader _? openCurlyBrace __
+    __?
+    contents:strContents+
+    __?
+    closeCurlyBrace {
+        return Object{
+            ObjectType: ObjStruct,
+            Name: header.(string),
+            Contents: objSlice(contents.([]interface{})),
+        }, nil
+    }
+
+strHeader
+    = "struct" _ name:itemName { return name, nil }
+
+strContents
+    = _? val:(fieldDefinition
+                / arrayDefinition
+                / comment
+                / str) __? { return val, nil }
+
+// Packages
+
+pkg
+    = _? header:pkgHeader _ openCurlyBrace __
+    __?
+    contents:pkgContents+
+    __?
+    closeCurlyBrace {
+        return Package{
+            Name: header.(string),
+            Contents: objSlice(contents.([]interface{})),
+        }, nil
+    }
+
+
+pkgHeader
+    = "package" _ name:itemName { return name, nil }
+
+pkgContents
+    = _? val:(idDefinition
+                / fieldDefinition
+                / arrayDefinition
+                / comment
+                / str) __? { return val, nil }

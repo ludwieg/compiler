@@ -1,0 +1,24 @@
+// This is a sample file used to manually test protocol conformity
+package test {
+    id 0x01
+
+    uint8   field_a     // 27
+    uint32  field_b     // 28
+    uint64  field_c     // 29
+    double  field_d     // 30.2
+    string  field_e     // Stringy!
+    blob    field_f     // 0x27 0x24 0x50
+    bool    field_g     // true
+    uuid    field_h     // 3232EE42-C2F2-4BAF-8413-18335B4D5640
+    @sub    field_i
+
+    struct sub {
+        string  field_j  // Structure
+        @other  field_k
+
+        struct other {
+            string field_l // Lower
+        }
+    }
+}
+

@@ -1,0 +1,7 @@
+templates/
+zag/
+tmp/
+.DS_Store
+go_base.go
+bin/
+vendor/

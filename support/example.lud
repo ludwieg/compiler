@@ -1,0 +1,36 @@
+// Ludwieg?
+// This is a sample file used to test parser expression grammar
+// usability and reliableness.
+package handshake_request {
+    id 0x06 // what?
+    // id
+    // another comment
+    uuid        refund_id               !deprecated
+    uint64      changes_timestamp       !deprecated
+    uuid[10]    uuid_array
+    @item[*]    changes
+
+    struct item {
+      any       thing
+      @other    structure
+
+      struct other {
+        uint8   counter
+      }
+
+    }
+}
+
+// Another comment -
+
+package handshake_response {
+ // another pkg
+    id 0x08
+ // one more comment
+    uuid hello
+//
+//
+}
+
+// EOF?
+//
