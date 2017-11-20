@@ -42,9 +42,6 @@ func validateStruct(obj parser.Object) []error {
 			} else {
 				fields[data.Name] = data
 			}
-			if data.Source == parser.SourceUser {
-				errors = append(errors, fmt.Errorf("struct `%s' has field with prohibited custom type `%s'", obj.Name, data.Name))
-			}
 		case parser.ObjArray:
 			if hasKey(data.Name, fields) {
 				errors = append(errors, fmt.Errorf("struct `%s' has duplicated field definition `%s'", obj.Name, data.Name))
