@@ -12,8 +12,9 @@ import (
 
 	"github.com/alecthomas/chroma/quick"
 	"github.com/logrusorgru/aurora"
-	"github.com/ludwieg/compiler/models"
 	log "github.com/sirupsen/logrus"
+
+	"github.com/ludwieg/ludco/models"
 )
 
 type Java struct {
@@ -322,7 +323,7 @@ func (c Java) integrationInstructions(pList *models.PackageList) string {
 
 	jitPackDependency := `      dependencies {
           dependencies {
-              compile 'com.github.ludwieg:kotlin:v0.1.1'
+              compile 'com.github.ludwieg:kotlin:v0.1.4'
           }
       }`
 

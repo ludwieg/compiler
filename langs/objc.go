@@ -11,8 +11,9 @@ import (
 
 	"github.com/alecthomas/chroma/quick"
 	"github.com/logrusorgru/aurora"
-	"github.com/ludwieg/compiler/models"
 	log "github.com/sirupsen/logrus"
+
+	"github.com/ludwieg/ludco/models"
 )
 
 type ObjC struct {

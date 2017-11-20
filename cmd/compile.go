@@ -5,10 +5,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ludwieg/compiler/langs"
 	log "github.com/sirupsen/logrus"
-
 	"github.com/urfave/cli"
+
+	"github.com/ludwieg/ludco/langs"
 )
 
 var Compile = cli.Command{

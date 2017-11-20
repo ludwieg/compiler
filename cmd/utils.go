@@ -7,9 +7,9 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/ludwieg/compiler/models"
-	"github.com/ludwieg/compiler/parser"
-	"github.com/ludwieg/compiler/validation"
+	"github.com/ludwieg/ludco/models"
+	"github.com/ludwieg/ludco/parser"
+	"github.com/ludwieg/ludco/validation"
 )
 
 // ProcessFiles attempts to load all files provided on the input array and

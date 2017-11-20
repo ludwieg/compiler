@@ -10,7 +10,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 
-	"github.com/ludwieg/compiler/models"
+	"github.com/ludwieg/ludco/models"
 )
 
 func printField(tree *gotree.GTStructure, index int, f models.Field) {

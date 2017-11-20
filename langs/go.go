@@ -12,7 +12,7 @@ import (
 	"github.com/logrusorgru/aurora"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/ludwieg/compiler/models"
+	"github.com/ludwieg/ludco/models"
 )
 
 type Go struct {

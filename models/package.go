@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/ludwieg/compiler/parser"
+	"github.com/ludwieg/ludco/parser"
 )
 
 func fail(msg string, args ...interface{}) {

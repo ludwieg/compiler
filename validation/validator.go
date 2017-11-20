@@ -5,7 +5,7 @@ import (
 	"math"
 	"strconv"
 
-	"github.com/ludwieg/compiler/parser"
+	"github.com/ludwieg/ludco/parser"
 )
 
 func hasKey(key string, obj map[string]parser.Object) bool {
