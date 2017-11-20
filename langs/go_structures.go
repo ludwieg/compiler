@@ -30,11 +30,7 @@ type {{.name}} struct {
 {{.fields}}
 }
 
-func (t {{.name}}) LudwiegMeta() []LudwiegTypeAnnotation { 
-	return []LudwiegTypeAnnotation{
-{{.annotations}}
-	}
-}
+func (t {{.name}}) LudwiegMeta() []LudwiegTypeAnnotation { return []LudwiegTypeAnnotation{ {{.annotations}} } }
 
 {{.structures}}
 `

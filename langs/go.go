@@ -134,8 +134,7 @@ func (c Go) generateAnnotations(fArr []models.Field, pkgName string) string {
 
 	annotations := strings.Join(annotationsArr, ",")
 	if len(annotationsArr) > 1 {
-		annotations = annotations + ","
-		annotations = strings.Replace(annotations, ",", ",\n", -1)
+		annotations = "\n" + strings.Replace(annotations, ",", ",\n", -1) + ",\n"
 	}
 	return annotations
 }
