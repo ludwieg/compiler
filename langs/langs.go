@@ -29,6 +29,11 @@ func processTemplate(facility, templateString string, data templateData) []byte 
 }
 
 func convertToPascalCase(val string) string {
+	// UUID requires special attention
+	if strings.ToLower(val) == "uuid" {
+		return "UUID"
+	}
+
 	arr := []string{}
 	for _, s := range strings.Split(val, "_") {
 		rs := []rune(s)
