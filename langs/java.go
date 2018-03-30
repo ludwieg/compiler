@@ -327,7 +327,7 @@ func (c Java) integrationInstructions(pList *models.PackageList) string {
 
 	jitPackDependency := `      dependencies {
           dependencies {
-              compile 'com.github.ludwieg:kotlin:v0.1.4'
+              compile 'com.github.ludwieg:kotlin:v0.1.6'
           }
       }`
 
