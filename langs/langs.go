@@ -29,9 +29,11 @@ func processTemplate(facility, templateString string, data templateData) []byte 
 }
 
 func convertToPascalCase(val string) string {
-	// UUID requires special attention
+	// UUID and DynInt requires special attention
 	if strings.ToLower(val) == "uuid" {
 		return "UUID"
+	} else if strings.ToLower(val) == "dynint" {
+		return "DynInt"
 	}
 
 	arr := []string{}

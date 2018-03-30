@@ -25,7 +25,7 @@ type Java struct {
 func (c Java) Compile(in, out, pkgName, prefix string, packages *models.PackageList) {
 	log.Infof("Initialising %s compiler", aurora.Red("Java"))
 	if prefix != "" {
-		log.Warn("Ignoring unecessary --prefix option.")
+		log.Warn("Ignoring unnecessary --prefix option.")
 		prefix = ""
 	}
 	if pkgName == "" {
@@ -115,7 +115,7 @@ func (c Java) getClassAnnotationFor(item interface{}) string {
 	case *models.Struct:
 		template = javaAnnotationStruct
 	default:
-		log.Fatalf("BUG: getClassAnnotationFor falled for invalid type %#v", item)
+		log.Fatalf("BUG: getClassAnnotationFor failed for invalid type %#v", item)
 	}
 	return string(processTemplate("classAnnotation", template, data))
 }
@@ -244,6 +244,8 @@ func (c Java) generateSetters(fArr []models.Field, pkgName string) string {
 			} else {
 				if f.Type.NativeType == models.TypeAny {
 					template = javaSetterNativeAny
+				} else if f.Type.NativeType == models.TypeDynInt {
+					template = javaSetterNativeDynInt
 				} else {
 					template = javaSetterNative
 				}
@@ -293,10 +295,12 @@ func (c Java) nativeTypeForProtocolType(t models.NativeType) string {
 		kind = "UUID"
 	case models.TypeAny:
 		kind = "Object"
+	case models.TypeDynInt:
+		kind = "DynInt"
 	}
 
 	if kind == "" {
-		log.Fatalf("BUG: Cannot coerce unknown type %#v to native type.", kind)
+		log.Fatalf("BUG: Cannot coerce unknown type %#v to native type.", t)
 	}
 
 	return kind
