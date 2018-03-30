@@ -59,7 +59,7 @@ array_size
     = open_square_brace val:("*" / digits) close_square_brace { return val }
 
 native_type
-    = val:("uint8" / "uint32" / "uint64" / "byte" / "double" / "string" / "blob" / "bool" / "uuid" / "array" / "any") { return { source: "native", name: val } }
+    = val:("dynint" / "uint8" / "uint32" / "uint64" / "byte" / "double" / "string" / "blob" / "bool" / "uuid" / "array" / "any") { return { source: "native", name: val } }
 
 user_type
     = "@" val:item_name { return { source: "user", name: val } }

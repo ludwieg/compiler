@@ -28,36 +28,40 @@ const (
 type NativeType string
 
 const (
+	// TypeDynInt automatically detects and processes an integer value based on
+	// its size
+	TypeDynInt NativeType = "dynint"
+
 	// TypeUint8 represents an 8-bit unsigned integer
 	TypeUint8 NativeType = "uint8"
 
 	// TypeUint32 represents a 32-bit unsigned integer
-	TypeUint32 = "uint32"
+	TypeUint32 NativeType = "uint32"
 
 	// TypeUint64 represents a 64-bit unsigned integer
-	TypeUint64 = "uint64"
+	TypeUint64 NativeType = "uint64"
 
 	// TypeByte represents an 8-bit unsigned integer. Internally, it works as
 	// an alias to TypeUint8.
-	TypeByte = "byte"
+	TypeByte NativeType = "byte"
 
 	// TypeDouble represents an IEEE-754 64-bit floating-point number
-	TypeDouble = "double"
+	TypeDouble NativeType = "double"
 
 	// TypeString represents an UTF-8 encoded string
-	TypeString = "string"
+	TypeString NativeType = "string"
 
 	// TypeBlob represents a Binary Large OBject.
-	TypeBlob = "blob"
+	TypeBlob NativeType = "blob"
 
 	// TypeBool represents a true/false value. Internaly, it works as an alias
 	// to TypeUint8
-	TypeBool = "bool"
+	TypeBool NativeType = "bool"
 
 	// TypeUUID represents an Universally Unique IDentifier. It is stored as
 	// a 128-bit (16 bytes) value, rather than a 256-bit (32 bytes) string
 	// value
-	TypeUUID = "uuid"
+	TypeUUID NativeType = "uuid"
 
 	// TypeAny represents a field that can contain any possible value. It is
 	// especially useful for dynamic data structures. On the target language
@@ -65,7 +69,7 @@ const (
 	// or id (ObjC). On languages that thread managed and primitive types,
 	// the parser must prefer to use managed types (NSNumber for ObjC, Boolean
 	// for Java, for instance).
-	TypeAny = "any"
+	TypeAny NativeType = "any"
 )
 
 // Source identifies the source of a type used in a Field
@@ -126,6 +130,7 @@ type Package struct {
 	Fields []Field
 }
 
+// RawIdentifier returns the raw identifier of a package as a byte
 func (p Package) RawIdentifier() byte {
 	v, err := strconv.ParseUint(p.Identifier[2:], 16, 8)
 	if err != nil {
@@ -239,6 +244,8 @@ func typeFromParser(obj parser.Object) Type {
 
 func nativeTypeFromParser(t string) NativeType {
 	switch t {
+	case "dynint":
+		return TypeDynInt
 	case "uint8":
 		return TypeUint8
 	case "uint32":

@@ -141,7 +141,7 @@ arraySize
     = openSquareBrace val:("*" / digits) closeSquareBrace { return asString(val), nil }
 
 nativeType
-    = val:("uint8" / "uint32" / "uint64" / "byte" / "double" / "string" / "blob" / "bool" / "uuid" / "any") {
+    = val:("dynint" / "uint8" / "uint32" / "uint64" / "byte" / "double" / "string" / "blob" / "bool" / "uuid" / "any") {
         return Type{
             Name: asString(val),
             Source: SourceNative,
