@@ -24,7 +24,7 @@ type ObjC struct {
 func (c ObjC) Compile(in, out, pkgName, prefix string, packages *models.PackageList) {
 	log.Infof("Initialising %s compiler", aurora.Blue("objc"))
 	if pkgName != "" {
-		log.Warn("Ignoring unecessary --pacakge option")
+		log.Warn("Ignoring unnecessary --package option")
 	}
 	if prefix == "" {
 		log.Warn("You did not specify a prefix using the --prefix option. Although optional, its use is advised.")
@@ -206,7 +206,7 @@ func (c ObjC) formatCode(code string) string {
 }
 
 func (c ObjC) integrationInstructions(pList *models.PackageList) string {
-	list := []string{}
+	var list []string
 	for _, p := range *pList {
 		list = append(list, "["+convertToPascalCase(p.Name)+" class]")
 	}

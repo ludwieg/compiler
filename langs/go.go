@@ -23,7 +23,7 @@ type Go struct {
 func (c Go) Compile(in, out, pkgName, prefix string, packages *models.PackageList) {
 	log.Infof("Initialising %s compiler", aurora.Blue("Golang"))
 	if prefix != "" {
-		log.Warn("Ignoring unecessary --prefix option.")
+		log.Warn("Ignoring unnecessary --prefix option.")
 		prefix = ""
 	}
 	if pkgName == "" {
@@ -51,7 +51,7 @@ func (c Go) Compile(in, out, pkgName, prefix string, packages *models.PackageLis
 }
 
 func (c Go) writeInitializer(pkgs *models.PackageList) {
-	result := []string{}
+	var result []string
 	for _, p := range *pkgs {
 		result = append(result, convertToPascalCase(p.Name)+"{}")
 	}
@@ -152,7 +152,7 @@ func (c Go) writeStruct(s *models.Struct, prefix string) []byte {
 func (c Go) writeAnnotation(f *models.Field, prefix string) []byte {
 	isArray := f.Size != ""
 	if f.Type.Source == "native" {
-		val := []string{}
+		var val []string
 		if isArray {
 			val = append(val, "Type: TypeArray", `ArraySize: "`+f.Size+`"`)
 			val = append(val, "ArrayType: Type"+convertToPascalCase(string(f.Type.NativeType)))
@@ -187,6 +187,7 @@ func (c Go) writeField(f *models.Field, prefix string) []byte {
 			if isArray {
 				t = "[]" + t
 			}
+
 		} else {
 			t = "*Ludwieg" + convertToPascalCase(string(f.Type.NativeType))
 			if isArray {
@@ -197,7 +198,9 @@ func (c Go) writeField(f *models.Field, prefix string) []byte {
 		// User-based types are always relative to the current package. Given
 		// our naming rules, we can just append the name of the struct to the
 		// current package name without needing to resort to any name-resolution
-		// techniniques.
+		// techniques.
+		// FIXME: It is necessary to resolve field names here. Otherwise, a field cannot reference a package from
+		//        other levels.
 		t = "*" + prefix + convertToPascalCase(f.Type.CustomType)
 		if isArray {
 			t = "[](" + t + ")"

@@ -6,7 +6,7 @@ package {{.pkg}}
 
 type {{.name}} struct{}
 func (t {{.name}}) LudwiegID() byte { return {{.id}} }
-func (t {{.name}}) LudwiegMeta() []LudwiegTypeImplementation { return []LudwiegTypeAnnotation{} }
+func (t {{.name}}) LudwiegMeta() []LudwiegTypeAnnotation { return []LudwiegTypeAnnotation{} }
 `
 
 const goField = "	{{.name}} {{.type}}\n"

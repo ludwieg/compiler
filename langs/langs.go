@@ -34,6 +34,8 @@ func convertToPascalCase(val string) string {
 		return "UUID"
 	} else if strings.ToLower(val) == "dynint" {
 		return "DynInt"
+	} else if strings.ToLower(val) == "byte" {
+		return "Uint8"
 	}
 
 	arr := []string{}
@@ -45,7 +47,7 @@ func convertToPascalCase(val string) string {
 }
 
 func convertToCamelCase(val string) string {
-	arr := []string{}
+	var arr []string
 	for i, s := range strings.Split(val, "_") {
 		rs := []rune(s)
 		s = ""
