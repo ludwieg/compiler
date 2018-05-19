@@ -168,6 +168,9 @@ project.
 > **Notice**: `ludco` will not create folder structure based on package names,
 > such as `com.example.project` even when `--package` is provided.
 
+## Known problems
+- It is not possible to reference a struct type declared a level higher than the field referencing it.
+
 ## License
 
 ```
