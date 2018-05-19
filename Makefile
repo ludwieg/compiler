@@ -2,7 +2,7 @@
 
 compiler: templates
 	@mkdir -p bin \
-	&& go build -ldflags "-s -w" -o bin/ludco
+	&& go build -ldflags "-s -w -X main.build_date=`date +"%Y%m%d.%H%M%S"`" -o bin/ludco
 
 install:
 	cp bin/ludco /usr/local/bin
